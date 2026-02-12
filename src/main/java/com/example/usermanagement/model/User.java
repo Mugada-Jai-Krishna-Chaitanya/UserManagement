@@ -1,26 +1,48 @@
 package com.example.usermanagement.model;
 
-public class User {
-    private final Long Id;
-    private final String Name;
-    private final String Email;
+import jakarta.persistence.*;
 
-    public User(Long id, String name, String email) {
-        Id = id;
-        Name = name;
-        Email = email;
+@Entity
+@Table(name = "users")
+public class User{
+
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
+    private Long id;
+    private String name;
+    private String email;
+
+    public User() {
+    }
+
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
