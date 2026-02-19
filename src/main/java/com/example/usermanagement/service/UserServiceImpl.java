@@ -1,5 +1,6 @@
 package com.example.usermanagement.service;
 
+import com.example.usermanagement.exception.UserNotFoundException;
 import com.example.usermanagement.model.User;
 import com.example.usermanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public User findById(Long id) {
         Optional<User> user =  userRepository.findById(id);
         if(user.isEmpty()){
-            throw new RuntimeException("User with the id "+ id +" Not found");
+            throw new UserNotFoundException("User with the id "+ id +" Not found");
         }
         return user.get();
     }
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
             userRepository.deleteById(id);
         }
         else{
-            throw new RuntimeException("User not found with id:"+id);
+            throw new UserNotFoundException("User not found with id:"+id);
         }
     }
 
