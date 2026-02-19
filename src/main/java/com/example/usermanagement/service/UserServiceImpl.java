@@ -2,12 +2,13 @@ package com.example.usermanagement.service;
 
 import com.example.usermanagement.model.User;
 import com.example.usermanagement.repository.UserRepository;
-import com.example.usermanagement.repository.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,7 +29,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User findById(Long id) {
-        return userRepository.findById(id);
+        Optional<User> user =  userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new RuntimeException("User with the id "+ id +" Not found");
+        }
+        return user.get();
     }
 
     @Override
@@ -40,18 +45,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void delete(Long id) {
-        User user = userRepository.findById(id);
-        if(user != null){
-            userRepository.delete(user);
+        if(userRepository.findById(id).isPresent()){
+            userRepository.deleteById(id);
         }
         else{
-            System.out.println("User not found with id:"+id);
+            throw new RuntimeException("User not found with id:"+id);
         }
     }
 
     @Override
     @Transactional
     public void update(User user) {
-        userRepository.update(user);
+        userRepository.save(user);
     }
 }
